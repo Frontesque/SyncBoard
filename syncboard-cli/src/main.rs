@@ -2,6 +2,8 @@ mod server;
 mod client;
 pub mod clipboard;
 pub mod utils;
+use std::thread;
+use std::time::Duration;
 
 fn help() {
     println!("
@@ -22,7 +24,13 @@ fn help() {
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    if args.len() < 2 { return help(); }
+    if args.len() < 2 { // Runs if the program is given with no additional args
+        println!("[Syncboard] No arguments provided. Showing help.");
+        help();
+        println!("[SyncBoard] The program will exit automatically in 10 seconds.");
+        thread::sleep(Duration::from_millis(10000));
+        return;
+    }
     
     println!("[SyncBoard] Welcome to SyncBoard v{}!", env!("CARGO_PKG_VERSION"));
     match args[1].as_str() {

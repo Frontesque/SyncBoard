@@ -1,7 +1,4 @@
 use tungstenite::connect;
-use std::thread::spawn;
-use std::thread;
-use std::time::Duration;
 use std::sync::mpsc;
 use crate::utils;
 use crate::clipboard;
@@ -19,19 +16,7 @@ pub fn start(server_address: String) {
 
     //---   Watch Clipboard   ---//
     let (tx, rx) = mpsc::channel();
-    spawn(move || {
-        let mut last_clipboard: String = "".to_string();
-        loop {
-            let this_clipboard = clipboard::get();
-            if last_clipboard != this_clipboard {
-                println!("[SyncBoard Watcher] Update: {}", this_clipboard);
-                tx.send(this_clipboard.clone()).unwrap();
-                last_clipboard = this_clipboard;
-            }
-            thread::sleep(Duration::from_millis(1000));
-        }
-    });
-
+    clipboard::watch(tx);
     for received in rx {
         let _ = websocket.send(utils::build_ws_message("update_clipboard", received.clone().as_str()));
     }
@@ -53,6 +38,10 @@ pub fn start(server_address: String) {
                 } else {
                     println!("[SyncBoard Client] The client is running a different version from the server. Client: {}, Server: {}. You may face issues.", env!("CARGO_PKG_VERSION"), contents);
                 }
+            },
+            "update_clipboard" => {
+                println!("[SyncBoard Client] Clipboard update: {}", contents);
+                clipboard::set(contents);
             },
             _  => { println!("[SyncBoard Client] Recieved an unknown message from server: {}", msg) }
         }

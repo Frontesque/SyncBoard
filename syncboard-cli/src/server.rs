@@ -3,6 +3,7 @@ use std::thread::spawn;
 use tungstenite::accept;
 use crate::utils;
 use crate::clipboard;
+use std::sync::mpsc;
 
 pub fn start(port: u32) {
     let bind: String = format!("0.0.0.0:{}", port);
@@ -11,13 +12,23 @@ pub fn start(port: u32) {
     for stream in server.incoming() {
         spawn (move || {
             let mut websocket = accept(stream.unwrap()).unwrap();
+
+            //---   Watch Clipboard   ---//
+            let (tx, rx) = mpsc::channel();
+            clipboard::watch(tx);
+            for received in rx {
+                let _ = websocket.send(utils::build_ws_message("update_clipboard", received.clone().as_str()));
+            }
+
+            //---   Listen for messages   ---//
             loop {
-                let msg = websocket.read().unwrap();
+                let message_handler = websocket.read();
+                let msg = match message_handler {
+                    Ok(msg) => msg,
+                    Err(_) => return,
+                };
                 if msg.is_text() {
                     // println!("[SyncBoard Server Debug] Message from client: {}", msg);
-
-
-
                     let [identifier, contents] = utils::deconstruct_ws_message(msg.to_string().as_str());
                     match identifier.as_str() {
                         "new_client" => {
