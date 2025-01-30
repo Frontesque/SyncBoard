@@ -5,9 +5,7 @@ pub mod utils;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    if args.len() < 2 {
-        return eprintln!("Usage: {} <action>", args[0]);
-    }
+    if args.len() < 2 { return eprintln!("Usage: {} <action>", args[0]); }
     
     println!("[SyncBoard] Welcome to SyncBoard v{}!", env!("CARGO_PKG_VERSION"));
     match args[1].as_str() {
@@ -17,13 +15,15 @@ fn main() {
         },
         "client" => {
             println!("[SyncBoard] Starting client...");
-            client::start("ws://localhost:9055".to_string());
+            if args.len() < 3 { return eprintln!("Usage: {} client <ip_address>", args[0]); }
+            let server_address = format!("ws://{}:9055",args[2]);
+            client::start(server_address.to_string());
         },
         "test" => {
             println!("[SyncBoard] Testing SyncBoard capabilities on your system!");
-            println!("[SyncBoard Test] Your current clipboard is: \"{}\"", clipboard::get_clipboard());
+            println!("[SyncBoard Test] Your current clipboard is: \"{}\"", clipboard::get());
             let test_string: String = format!("You're running SyncBoard v{}!", env!("CARGO_PKG_VERSION"));
-            clipboard::set_clipboard(test_string.clone());
+            clipboard::set(test_string.clone());
             println!("[SyncBoard Test] Your clipboard should now contain: \"{}\".", test_string);
             println!("[SyncBoard Test] Try pasting somewhere!");
         }

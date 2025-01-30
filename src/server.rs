@@ -2,9 +2,8 @@ use std::net::TcpListener;
 use std::thread::spawn;
 use tungstenite::accept;
 use crate::utils;
-// use crate::clipboard;
+use crate::clipboard;
 
-/// A WebSocket echo server
 pub fn start(port: u32) {
     let bind: String = format!("0.0.0.0:{}", port);
     println!("[SyncBoard Server] Listening on: {}", bind);
@@ -29,6 +28,10 @@ pub fn start(port: u32) {
                             } else {
                                 println!("[SyncBoard Server] The client is running a different version from the server. Client: {}, Server: {}. You may face issues.", contents, env!("CARGO_PKG_VERSION"));
                             }
+                        },
+                        "update_clipboard" => {
+                            println!("[SyncBoard Server] Clipboard update: {}", contents);
+                            clipboard::set(contents);
                         },
                         _  => { println!("[SyncBoard Server] Recieved an unknown message from client: {}", msg) }
                     }
