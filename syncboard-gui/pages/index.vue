@@ -1,22 +1,24 @@
 <template>
-    <div class="p-8">
-        
-        <h1 class="text-3xl text-white text-center">Select a mode to run SyncBoard</h1>
-
+    <div>
+        <banner />
+        <!--   Mode Selection   -->
+        <h2 class="text-3xl text-white text-center">Select a mode</h2>
         <div class="flex">
-            <button class="box">
-                <icon name="server" size="50x50" class="center-icon" />
+            <NuxtLink to="/server" class="box">
+                <icon name="server" size="50x50" class="center" />
                 <p class="text-3xl text-white">Server</p>
-            </button>
-            <button class="box">
-                <icon name="display" size="50x50" class="center-icon" />
+            </NuxtLink>
+            <NuxtLink to="/client" class="box">
+                <icon name="display" size="50x50" class="center" />
                 <p class="text-3xl text-white">Client</p>
-            </button>
+            </NuxtLink>
         </div>
-        <button class="box flex">
-            <icon name="flask-vial" size="40x40" />
-            <p class="text-3xl text-white ml-4">Test</p>
-        </button>
+        <div class="flex">
+            <NuxtLink to="/test"  class="box flex">
+                <icon name="flask-vial" size="40x40" />
+                <p class="text-3xl text-white ml-4">Test</p>
+            </NuxtLink>
+        </div>
 
     </div>
 </template>
@@ -30,15 +32,9 @@
     align-items: center;
     align-content: center;
     
-
     border-radius: 1em;
     border: 3px solid var(--primary);
     margin: 1em;
     padding: 1em;
-}
-
-.center-icon {
-    margin-left: auto;
-    margin-right: auto;
 }
 </style>

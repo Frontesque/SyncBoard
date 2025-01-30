@@ -1,12 +1,16 @@
 <template>
   <NuxtLayout>
-      <NuxtPage></NuxtPage>
+      <NuxtPage class="p-8" />
   </NuxtLayout>
 </template>
 
 <style>
 :root {
-  --primary: #8867c0;
+  --primary: #ffa300;
+}
+.center {
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
 

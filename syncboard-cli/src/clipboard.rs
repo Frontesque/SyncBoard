@@ -37,3 +37,11 @@ pub fn watch(tx: Sender<String>) {
         }
     });
 }
+
+pub fn test() {
+    println!("[SyncBoard Test] Your current clipboard is: \"{}\"", get());
+    let test_string: String = format!("You're running SyncBoard v{}!", env!("CARGO_PKG_VERSION"));
+    set(test_string.clone());
+    println!("[SyncBoard Test] Your clipboard should now contain: \"{}\".", test_string);
+    println!("[SyncBoard Test] Try pasting somewhere!");
+}
