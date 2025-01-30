@@ -4,6 +4,12 @@
   </NuxtLayout>
 </template>
 
+<style>
+:root {
+  --primary: #8867c0;
+}
+</style>
+
 <script setup>
 useHead({
   htmlAttrs: {
