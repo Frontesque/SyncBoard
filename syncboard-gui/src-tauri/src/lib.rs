@@ -10,8 +10,9 @@ use std::thread::spawn;
 //---   Tauri Functions   ---//
 #[tauri::command]
 fn start_syncboard_client(address: String) -> bool {
+  let server_address = format!("ws://{}:9055",address);
   spawn(move || {
-    syncboard_client::start(address);
+    syncboard_client::start(server_address);
   });
   return true;
 }
