@@ -1,18 +1,20 @@
-use arboard::Clipboard;
-
-fn get_clipboard() -> String {
-    let mut clipboard = Clipboard::new().unwrap();
-    let contents = clipboard.get_text().unwrap();
-    return contents;
-}
+use std::env;
+mod server;
+mod client;
 
 fn main() {
-    let mut last_clipboard: String = "".to_string();
-    loop {
-        let this_clipboard = get_clipboard();
-        if last_clipboard != this_clipboard {
-            println!("Clipboard updated: {}", this_clipboard);
-            last_clipboard = this_clipboard;
-        }
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+        return eprintln!("Usage: {} <action>", args[0]);
+    }
+    
+    match args[1].as_str() {
+        "server" => {
+            server::start(9055);
+        },
+        "client" => {
+            client::start("ws://localhost:9055".to_string());
+        },
+        _  => { return eprintln!("Usage: {} <action>", args[0]); }
     }
 }
