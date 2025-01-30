@@ -8,6 +8,8 @@ A cross-platform clipboard syncronization utility written in Rust
 ### Features
 
 - 🖥 **Lightweight** • _SyncBoard only uses ~3mb of system memory on all platforms*_
+- 🔌 **Simple** • _SyncBoard is plug-and-play on all platforms. No extra dependencies required_
+- 🗲 **Fast** • Clipboard contents is usually transmitted in <1 second
 - 📶 **Wireless Clipboard Share** • _Connect to devices on your local network_
 
 
